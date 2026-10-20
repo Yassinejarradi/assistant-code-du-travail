@@ -1,0 +1,6 @@
+# Normalise line endings in the repo (files were written with mixed CRLF/LF on Windows)
+* text=auto
+*.bat text eol=crlf
+*.pdf binary
+*.png binary
+*.gif binary

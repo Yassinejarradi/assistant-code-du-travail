@@ -1,0 +1,23 @@
+[server]
+# Only reachable from this computer (Streamlit listens on every network interface by default).
+address = "localhost"
+headless = false  # open the browser automatically on `streamlit run`
+# No auto-reload on code changes: the watcher walks every loaded module (incl. transformers'
+# lazy imports), which costs CPU/RAM at startup and floods the log with torchvision errors.
+fileWatcherType = "none"
+
+[client]
+# Hide developer menu items (Deploy, Rerun...) for a cleaner demo
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+# Colours taken from the ENSAM Casablanca logo (assets/ensam_logo.png)
+base = "light"
+primaryColor = "#1F5793"
+backgroundColor = "#F6F8FB"
+secondaryBackgroundColor = "#EAF0F7"
+textColor = "#1B2433"
+font = "sans serif"

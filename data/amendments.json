@@ -1,0 +1,19 @@
+{
+  "description": "Amendments to Loi 65-99 published after the 2011 consolidated version (data/raw/code_du_travail_2011.pdf). Merged into the matching article by src/chunking.py. `summary` is a faithful summary, not the official wording: replace it with the official text (field `official_text`) once available from the Bulletin Officiel.",
+  "amendments": [
+    {
+      "article_number": 193,
+      "law": "Loi n° 32.26 modifiant et complétant l'article 193 de la loi n° 65-99 relative au Code du travail",
+      "dahir": "Dahir n° 1.26.27 du 17 moharrem 1448 (3 juillet 2026)",
+      "bulletin_officiel": "B.O. n° 7526 du 1er safar 1448 (16 juillet 2026), p. 4422",
+      "in_force": "2026-07-16",
+      "summary": "Les agents de sécurité privée liés par un contrat de travail avec une entreprise soumise à la loi n° 27-06 relative aux activités de gardiennage et de transport de fonds ne relèvent plus du régime des heures de présence prévu au point 2 du présent article : la durée normale de travail leur est applicable, soit 8 heures de travail par jour au lieu de 12 heures. Cette modification ne concerne que ces agents de sécurité privée : le point 2 reste applicable aux autres salariés qu'il vise (concierges, gardiens et surveillants qui ne sont pas employés par une entreprise soumise à la loi n° 27-06, etc.). La loi s'applique immédiatement aux contrats conclus après son entrée en vigueur ; les entreprises disposent d'un délai maximal de neuf mois pour mettre en conformité les contrats antérieurs.",
+      "official_text": null,
+      "sources": [
+        "https://h24info.ma/economie/agents-de-securite-privee-8-heures-officielle/",
+        "https://www.lebrief.ma/la-chambre-des-conseillers-renforce-les-droits-des-agents-de-securite-privee-100156021/",
+        "https://fr.le360.ma/politique/agents-de-securite-privee-la-chambre-des-conseillers-adopte-le-passage-de-12-a-8-heures-de-travail_CE4D5VJVSFF3VJPS5MIEKBKVYE/"
+      ]
+    }
+  ]
+}

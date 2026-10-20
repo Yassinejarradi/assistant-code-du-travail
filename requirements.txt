@@ -1,0 +1,17 @@
+# Step 1 — data extraction
+pymupdf>=1.24,<2
+
+# Step 2 — retrieval
+# PyTorch: install the CPU build first to avoid a multi-GB CUDA download:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch>=2.2
+sentence-transformers>=3.0   # embedding models (BAAI/bge-m3)
+chromadb>=1.0                # vector database
+rank-bm25>=0.2.2             # BM25 lexical search
+snowballstemmer>=2.2         # French stemming for BM25
+
+# Step 3 — generation (needs the Ollama app: https://ollama.com)
+ollama>=0.4
+
+# Step 4 — web interface
+streamlit>=1.40
