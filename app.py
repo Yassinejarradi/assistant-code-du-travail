@@ -280,16 +280,33 @@ for msg in messages:
             if msg.get("searched"):
                 st.markdown(f'<div class="searched">🔎 Recherche : {html.escape(msg["searched"])}</div>',
                             unsafe_allow_html=True)
-            show_citations(msg.get("cited", []))
-            show_sources(msg["sources"], msg["unsupported"])
+            if msg.get("cited"):  # articles only when the answer actually relies on them
+                show_citations(msg["cited"])
+                show_sources(msg["sources"], msg["unsupported"])
 
 if question:  # the user message is already displayed above; now write the answer
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         # previous (question, answer) pairs of this conversation, for follow-up questions
         history = [(q["content"], a["content"]) for q, a in zip(messages[:-1:2], messages[1:-1:2])]
         try:
+            legal = rag.is_legal(question, history)  # "Bonjour", "merci"… -> natural reply, no search
+        except Exception:
+            legal = True
+        if not legal:
+            try:
+                text = st.write_stream(rag.chat(question, history))
+            except Exception as e:
+                st.error(f"Le modèle de langage ne répond pas ({e}). Lancez Ollama (`ollama serve`).")
+                st.stop()
+            messages.append({"role": "assistant", "content": text.strip(), "searched": None, "cited": [],
+                             "sources": [], "unsupported": []})
+            st.stop()
+        try:
+            # follow-ups only refer to legal exchanges ("Bonjour" is not context for rewriting)
+            legal_history = [(q["content"], a["content"])
+                             for q, a in zip(messages[:-1:2], messages[1:-1:2]) if a.get("sources")]
             with st.spinner("Recherche dans le Code du travail…"):
-                standalone = rag.condense(question, history)  # "Et les concierges ?" -> full question
+                standalone = rag.condense(question, legal_history)  # "Et les concierges ?" -> full question
                 hits = rag.retrieve(standalone)
             searched = standalone if standalone != question else None
             if searched:
@@ -309,8 +326,9 @@ if question:  # the user message is already displayed above; now write the answe
             "text": h.chunk["text"],
             "amended_by": h.chunk.get("amended_by", []),
         } for h in hits]
-        show_citations(ans.cited)
-        show_sources(sources, ans.unsupported)
+        if ans.cited:
+            show_citations(ans.cited)
+            show_sources(sources, ans.unsupported)
 
     messages.append({"role": "assistant", "content": ans.text, "searched": searched, "cited": ans.cited,
                      "sources": sources, "unsupported": ans.unsupported})

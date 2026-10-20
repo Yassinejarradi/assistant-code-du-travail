@@ -20,6 +20,9 @@ embedding model, local vector database and a local LLM, with no API and no data 
   model, and anything else is flagged as possibly invented.
 - **Kept up to date.** Amendments published after the 2011 text are attached to their article, for
   example **loi n° 32.26 (2026)**: private security agents now work 8 h/day instead of 12 (art. 193).
+- **Natural conversation.** Greetings, thanks and off-topic messages get a short, human reply without
+  searching the law; articles only appear when an answer relies on them. A router (rules for obvious
+  cases, the LLM for the rest) decides whether a message is a legal question.
 - **Chat interface** in the style of ChatGPT: conversation history, streamed answers, sources panel.
 
 | Home | Answer with an opened citation |
@@ -34,7 +37,9 @@ flowchart LR
     AMD["Amendments<br/>(loi 32.26…)"] --> CH
     ART --> CH["604 chunks<br/>hierarchy path + text"]
     CH -->|bge-m3 embeddings| DB[("Chroma<br/>vector index")]
-    Q["Question"] --> RW["Follow-up rewriting<br/>(LLM)"]
+    Q["Message"] --> RT{"Router:<br/>legal question?"}
+    RT -->|no: bonjour, merci…| CHAT["Natural reply<br/>(no articles)"]
+    RT -->|yes| RW["Follow-up rewriting<br/>(LLM)"]
     RW --> RET["Retrieval<br/>top-5 articles"]
     DB --> RET
     RET --> LLM["Qwen3-4B via Ollama<br/>answer only from the articles"]

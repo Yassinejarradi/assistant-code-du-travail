@@ -97,6 +97,13 @@ Always rerun the validator after changing the extractor.
 - `fileWatcherType = "none"` in config: restart the server after editing `app.py`.
 - Follow-ups: `RAG.condense()` rewrites the question with the last exchange before retrieval
   (« Et pour le père ? » → « congé de paternité »); the app shows « 🔎 Recherche : … » when rewritten.
+- Router: `RAG.is_legal()` — regex for obvious small talk (instant), legal-keyword regex, else a
+  1-word LLM classification (default legal when unclear). Small talk → `RAG.chat()` with few-shot
+  examples (a 4B model ignored style rules: used "tu", emojis, answered off-topic). No search, no
+  articles shown. Citations/sources are displayed only when the answer cites an article.
+- Follow-up rewriting uses only legal exchanges as history ("Bonjour" made it rewrite full questions).
+- Citation parsing: singular "Article N" = one article ("Article 231, 1" is point 1, not art. 1);
+  only plural "Articles" introduces lists.
 - Clickable citations: one `st.popover` per cited article, full text from `articles.json` +
   amendment notes (`articles_by_number`), so cross-referenced articles work too.
 - README visuals (`docs/images/home.png`, `chat.png`, `demo.gif`) are recorded from the running app
