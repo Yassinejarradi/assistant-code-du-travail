@@ -54,6 +54,10 @@ Always rerun the validator after changing the extractor.
 - Machine: i7-8750H, 16 GB RAM, GTX 1050 Ti 4 GB, C: almost full. Caches live on D:
   (`HF_HOME=D:\ai-cache\huggingface`, `OLLAMA_MODELS=D:\ai-cache\ollama`, both user env vars).
   If Ollama is not running: `ollama serve`. Slowness is usually low free RAM (Chrome/games open).
+- GPU: Ollama ≥ 0.40 defaults to CUDA 13, which dropped the GTX 1050 Ti (compute 6.1) and silently
+  runs on CPU (nvidia-smi shows 0 MiB; prompt reading ~54 tok/s). `OLLAMA_LLM_LIBRARY=cuda_v12`
+  (user env var + set in `lancer_assistant.bat`) restores the GPU: 27/37 layers, ~680 tok/s prompt.
+  Check with `nvidia-smi` (~2.3 GB used while the model is loaded).
 - Speed: `RAG.warm_up()` runs when the Streamlit page opens (~55 s once), and `KEEP_ALIVE="30m"`
   stops Ollama unloading the LLM after 5 min idle. Warm questions take ~5–15 s.
 - Prompt lessons (4B model): the "no conversion/calculation" rule fixed invented unit conversions.

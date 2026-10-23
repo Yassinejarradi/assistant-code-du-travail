@@ -7,6 +7,9 @@ cd /d "%~dp0"
 rem Model caches live on D: (C: is almost full); offline mode skips Hugging Face network checks.
 set HF_HOME=D:\ai-cache\huggingface
 set OLLAMA_MODELS=D:\ai-cache\ollama
+rem Ollama 0.40's default CUDA 13 runtime no longer supports the GTX 1050 Ti (compute 6.1) and
+rem silently falls back to the CPU; CUDA 12 still supports it (prompt reading ~12x faster).
+set OLLAMA_LLM_LIBRARY=cuda_v12
 set HF_HUB_OFFLINE=1
 set HF_HUB_DISABLE_SYMLINKS_WARNING=1
 

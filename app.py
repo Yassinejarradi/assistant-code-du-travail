@@ -286,8 +286,12 @@ for msg in messages:
 
 if question:  # the user message is already displayed above; now write the answer
     with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
-        # previous (question, answer) pairs of this conversation, for follow-up questions
-        history = [(q["content"], a["content"]) for q, a in zip(messages[:-1:2], messages[1:-1:2])]
+        # previous (question, answer) pairs of this conversation, for follow-up questions. Pair each
+        # user message with the reply right after it: if a question is sent while the previous
+        # answer is still being written, that answer is lost and two user messages follow each other.
+        exchanges = [(m, n) for m, n in zip(messages[:-1], messages[1:-1])
+                     if m["role"] == "user" and n["role"] == "assistant"]
+        history = [(q["content"], a["content"]) for q, a in exchanges]
         try:
             legal = rag.is_legal(question, history)  # "Bonjour", "merci"… -> natural reply, no search
         except Exception:
@@ -303,8 +307,7 @@ if question:  # the user message is already displayed above; now write the answe
             st.stop()
         try:
             # follow-ups only refer to legal exchanges ("Bonjour" is not context for rewriting)
-            legal_history = [(q["content"], a["content"])
-                             for q, a in zip(messages[:-1:2], messages[1:-1:2]) if a.get("sources")]
+            legal_history = [(q["content"], a["content"]) for q, a in exchanges if a.get("sources")]
             with st.spinner("Recherche dans le Code du travail…"):
                 standalone = rag.condense(question, legal_history)  # "Et les concierges ?" -> full question
                 hits = rag.retrieve(standalone)
