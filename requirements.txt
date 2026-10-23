@@ -15,3 +15,6 @@ ollama>=0.4
 
 # Step 4 — web interface
 streamlit>=1.40
+
+# Development: tests (python -m pytest)
+pytest>=8

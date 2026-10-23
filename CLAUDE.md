@@ -42,7 +42,11 @@ Always rerun the validator after changing the extractor.
 .venv/Scripts/python src/retriever.py "question"  # top-k articles
 .venv/Scripts/python src/evaluate_retrieval.py    # Recall@k / MRR; rerun after any retrieval change
 .venv/Scripts/python src/rag.py "question"        # full answer (needs Ollama running)
+.venv/Scripts/python -m pytest                   # 42 tests, ~1 s, no models; also run by GitHub Actions
 ```
+
+Run the tests after any change to the data, chunking, citation parsing or router rules.
+Collaborator: **Soukaina Nejmaoui** (shown next to Yassine Jarradi in the app sidebar and README).
 
 ## Generation (step 3) and local setup
 

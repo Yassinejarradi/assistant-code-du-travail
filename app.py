@@ -27,6 +27,7 @@ from chunking import amendment_note, hierarchy_path, load_amendments  # noqa: E4
 from rag import LLM_MODEL, RAG  # noqa: E402
 
 AUTHOR = "Yassine Jarradi"
+COLLABORATOR = "Soukaina Nejmaoui"
 SCHOOL = "ENSAM Casablanca"
 PROGRAM = "Master IA & IoT"
 LOGO = ROOT / "assets" / "ensam_logo.png"
@@ -177,6 +178,15 @@ if "convs" not in st.session_state:
     new_conversation()
 
 
+def short_law(law: str) -> str:
+    """'Loi n° 32.26 modifiant et complétant l'article 193 …' -> 'Loi n° 32.26'."""
+    return law.split(" modifiant")[0].split(" complétant")[0]
+
+
+def amending_laws() -> list[str]:
+    return sorted({short_law(a["law"]) for amds in load_amendments().values() for a in amds})
+
+
 def show_citations(cited: list[int]) -> None:
     """One button per cited article; clicking it opens the full article text."""
     articles = articles_by_number(data_version())
@@ -189,7 +199,9 @@ def show_citations(cited: list[int]) -> None:
         for n in cited:
             art = articles[n]
             with st.popover(f"Art. {n}", width="content"):
-                st.markdown(f"**Article {n}**" + ("  ·  *modifié par la loi n° 32.26*" if art["amended_by"] else ""))
+                amended = ", ".join(short_law(law) for law in art["amended_by"])
+                st.markdown(f"**Article {n}**" + (f"  ·  *modifié par la {amended[0].lower()}{amended[1:]}*"
+                                                  if amended else ""))
                 st.caption(art["path"])
                 st.markdown(f'<div class="src-text">{html.escape(art["text"])}</div>', unsafe_allow_html=True)
 
@@ -198,7 +210,7 @@ def show_sources(sources: list[dict], unsupported: list[int]) -> None:
     with st.expander(f"Tous les articles consultés ({len(sources)})"):
         for s in sources:
             pills = '<span class="pill cited">cité</span>' if s["cited"] else ""
-            pills += "".join(f'<span class="pill amended">Modifié · {html.escape(law.split(" modifiant")[0])}</span>'
+            pills += "".join(f'<span class="pill amended">Modifié · {html.escape(short_law(law))}</span>'
                              for law in s.get("amended_by", []))
             st.markdown(
                 f'<div class="src{" is-cited" if s["cited"] else ""}"><div class="src-head">'
@@ -255,10 +267,12 @@ with st.sidebar:
             "uniquement à partir de ces articles</li>"
             "<li><b>Vérification</b> que chaque article cité figure dans les sources</li></ol>",
             unsafe_allow_html=True)
+        updates = ", ".join(law.replace("Loi", "loi") for law in amending_laws())
         st.caption("100 % local : aucune donnée ne quitte l'ordinateur. Source : loi n° 65-99, "
-                   "version consolidée du 26/10/2011, mise à jour par la loi n° 32.26 (2026).")
+                   "version consolidée du 26/10/2011" + (f", mise à jour par : {updates}." if updates else "."))
 
-    st.markdown(f'<div class="author">Réalisé par<br><b>{AUTHOR}</b><br>{PROGRAM} · {SCHOOL}</div>',
+    st.markdown(f'<div class="author">Réalisé par<br><b>{AUTHOR}</b><br>'
+                f'en collaboration avec <b>{COLLABORATOR}</b><br>{PROGRAM} · {SCHOOL}</div>',
                 unsafe_allow_html=True)
 
 rag = load_rag(data_version())  # warm up as soon as the page opens

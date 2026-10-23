@@ -1,6 +1,8 @@
 # ⚖️ Assistant Code du Travail — RAG chatbot for Moroccan labour law
 
-**Yassine Jarradi** — Master IA & IoT, ENSAM Casablanca
+[![tests](https://github.com/Yassinejarradi/assistant-code-du-travail/actions/workflows/tests.yml/badge.svg)](https://github.com/Yassinejarradi/assistant-code-du-travail/actions/workflows/tests.yml)
+
+**Yassine Jarradi**, in collaboration with **Soukaina Nejmaoui** — Master IA & IoT, ENSAM Casablanca
 
 A chatbot that answers questions about the **Moroccan Labour Code (Loi n° 65-99)** in plain French and
 **cites the exact articles** it relies on. It runs **100 % locally and for free** on a laptop: open-source
@@ -65,7 +67,12 @@ article is in the top k results.
 |---|---|---|---|
 | BM25 (keywords) | 0.42 | 0.64 | 0.52 |
 | **bge-m3 (dense, used)** | **0.74** | **0.92** | **0.81** |
-| Hybrid BM25 + dense (RRF) | 0.58 | 0.78 | 0.67 |
+| Hybrid BM25 + dense, equal weights (RRF) | 0.58 | 0.78 | 0.67 |
+| Hybrid, BM25 weight 0.1 | 0.74 | 0.90 | 0.81 |
+
+Last measured on 23 October 2026 on the current index (including the art. 193 amendment), with
+`python src/evaluate_retrieval.py`. Every BM25 weight above 0 lowered recall, so dense search is the
+default.
 
 On colloquial questions, dense search reaches 0.83 Recall@5 against 0.50 for BM25, and on everyday
 vocabulary 1.00 against 0.33. Details, experiments and lessons learned are in
@@ -106,6 +113,16 @@ python src/rag.py "question"        # full answer in the terminal
 streamlit run app.py                # web interface
 ```
 
+## Tests
+
+```bash
+python -m pytest        # 42 tests, ~1 s, no model or Ollama needed
+```
+
+They check the data (589 continuous articles, chunks, amendments, evaluation set), citation parsing,
+the small-talk / legal routing rules, the French tokenizer and the chunking rules. GitHub Actions
+runs them on every push.
+
 ## Adding an amendment
 
 The source PDF is the 2011 consolidated version. Later changes go in `data/amendments.json`
@@ -145,6 +162,7 @@ sources is stored; the official wording should replace it once taken from the Bu
 │   ├── text_utils.py                  # French tokenizer for BM25
 │   ├── evaluate_retrieval.py          # Recall@k / MRR
 │   └── rag.py                         # follow-up rewriting, prompt, LLM, citation check
+├── tests/                             # pytest suite (runs on GitHub Actions)
 ├── data/
 │   ├── raw/code_du_travail_2011.pdf   # official source (adala.justice.gov.ma)
 │   ├── articles.json                  # 589 extracted articles (never hand-edited)

@@ -65,12 +65,22 @@ def load_amendments() -> dict[int, list[dict]]:
     return by_article
 
 
+MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre",
+          "octobre", "novembre", "décembre"]
+
+
+def french_date(iso: str) -> str:
+    """'2026-07-16' -> '16 juillet 2026' (the LLM misread ISO dates: "le 16 juillet 2")."""
+    year, month, day = (int(x) for x in iso.split("-"))
+    return f"{day} {MONTHS[month - 1]} {year}"
+
+
 def amendment_note(a: dict) -> str:
     """Appended to the article text, so the LLM sees (and cites) the change with its legal source."""
     if a.get("official_text"):
         return f"[Modifié par la {a['law']} — {a['bulletin_officiel']}] Nouvelle rédaction : {a['official_text']}"
     return (f"[Mise à jour — {a['law']}, {a['bulletin_officiel']}, en vigueur depuis le "
-            f"{a['in_force']}. Résumé, texte officiel non reproduit] {a['summary']}")
+            f"{french_date(a['in_force'])}. Résumé, texte officiel non reproduit] {a['summary']}")
 
 
 def build_chunks(articles: list[dict], max_chars: int) -> list[dict]:
