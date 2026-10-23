@@ -271,8 +271,8 @@ with st.sidebar:
         st.caption("100 % local : aucune donnée ne quitte l'ordinateur. Source : loi n° 65-99, "
                    "version consolidée du 26/10/2011" + (f", mise à jour par : {updates}." if updates else "."))
 
-    st.markdown(f'<div class="author">Réalisé par<br><b>{AUTHOR}</b><br>'
-                f'en collaboration avec <b>{COLLABORATOR}</b><br>{PROGRAM} · {SCHOOL}</div>',
+    st.markdown(f'<div class="author">Réalisé par<br><b>{AUTHOR}</b><br><b>{COLLABORATOR}</b><br>'
+                f'{PROGRAM} · {SCHOOL}</div>',
                 unsafe_allow_html=True)
 
 rag = load_rag(data_version())  # warm up as soon as the page opens

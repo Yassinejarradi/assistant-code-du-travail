@@ -2,7 +2,7 @@
 
 [![tests](https://github.com/Yassinejarradi/assistant-code-du-travail/actions/workflows/tests.yml/badge.svg)](https://github.com/Yassinejarradi/assistant-code-du-travail/actions/workflows/tests.yml)
 
-**Yassine Jarradi**, in collaboration with **Soukaina Nejmaoui** — Master IA & IoT, ENSAM Casablanca
+**Yassine Jarradi** · **Soukaina Nejmaoui** — Master IA & IoT, ENSAM Casablanca
 
 A chatbot that answers questions about the **Moroccan Labour Code (Loi n° 65-99)** in plain French and
 **cites the exact articles** it relies on. It runs **100 % locally and for free** on a laptop: open-source
