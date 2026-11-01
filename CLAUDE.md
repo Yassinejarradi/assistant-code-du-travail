@@ -46,7 +46,7 @@ Always rerun the validator after changing the extractor.
 ```
 
 Run the tests after any change to the data, chunking, citation parsing or router rules.
-Authors: **Yassine Jarradi** and **Soukaina Nejmaoui**, listed as plain names (no "en collaboration" wording).
+Authors: **Yassine Jarradi** and **Soukaina Najmaoui**, listed as plain names (no "en collaboration" wording).
 
 ## Generation (step 3) and local setup
 

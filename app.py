@@ -27,7 +27,7 @@ from chunking import amendment_note, hierarchy_path, load_amendments  # noqa: E4
 from rag import LLM_MODEL, RAG  # noqa: E402
 
 AUTHOR = "Yassine Jarradi"
-COLLABORATOR = "Soukaina Nejmaoui"
+COLLABORATOR = "Soukaina Najmaoui"
 SCHOOL = "ENSAM Casablanca"
 PROGRAM = "Master IA & IoT"
 LOGO = ROOT / "assets" / "ensam_logo.png"
